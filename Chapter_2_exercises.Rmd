@@ -1,0 +1,173 @@
+
+Conceptual Exercises:
+
+Q1
+a) Flexible model would be best since we have a lot of observations
+b) Inflexible since we don't have many observations
+c) Flexible model since non-parametric models do better with this type.
+d) Inflexible a high bias model avoids fitting the noise (variance) in our dataset. 
+
+Q2
+a) Regression, inference, n=500, p=4
+b) Classification, prediction, n=20, p=13
+c) Regression, prediction, n=52, p=4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Applied Section of ISLR Chapter 2
+
+Setting working directory and reading in college dataset
+```{r}
+setwd("~/datasets/ISL/")
+college <- read.csv("College.csv")
+View(college)
+```
+The first column is the name of the college. Here we are assigning row-names using rownames() and setting the name of the rows to the college[, 1] which is translates to all rows and the first column
+
+the second line of code is setting college as everything but the first column.
+
+Lastly, we view to make sure everything is structured properly.
+```{r}
+rownames(college)=college[,1]
+college=college[,-1]
+View(college)
+```
+Use summary to produce a numerical summary
+```{r}
+summary(college)
+```
+Use pairs() to produce a scatterplot matrix of the first 10 columns
+```{r}
+pairs(college[1:10])
+```
+```{r}
+attach(college)
+plot(Private, Outstate, color="green")
+```
+```{r}
+Elite=rep("No", nrow(college))
+Elite[college$Top10perc>50] = "Yes"
+Elite=as.factor(Elite)
+college = data.frame(college, Elite)
+summary(Elite)
+```
+```{r}
+plot(Elite, Outstate)
+```
+```{r}
+#par(mfrow=c(2,2)) This will put graphs on multiple lines
+hist(Apps)
+hist(Outstate)
+```
+
+9) Auto Dataset
+
+```{r}
+setwd("~/datasets/ISL/")
+auto <- read.csv("Auto.csv", header=T, na.strings="?")
+auto = na.omit(auto)
+View(auto)
+names(auto)
+```
+Cylinders, name and origin are qualitative. MPG, displacement, horsepower, weight, acceleration and year are quantitative.
+
+```{r}
+attach(auto)
+quant <- data.frame(auto$mpg, auto$displacement, auto$horsepower, auto$weight, auto$acceleration, auto$year)
+```
+What is the range of each quantitative predictor?
+```{r}
+range(mpg)
+range(displacement)
+range(horsepower)
+range(weight)
+range(acceleration)
+range(year)
+```
+Mean and std for each quantitative predictor?
+```{r}
+sd(mpg)
+mean(mpg)
+```
+
+
+```{r}
+auto_removed <- auto[-seq(10, 85),]
+summary(auto_removed)
+```
+
+Loading in Boston Housing
+```{r}
+library(MASS)
+Boston
+?Boston
+```
+
+
+```{r}
+View(Boston)
+```
+
+
+
+```{r}
+pairs(Boston)
+```
+After inspecting some of the scatter plots in the pair plot, it seems that there are not many predictors that look too linear except lstat and rm. 
+
+```{r}
+cor(Boston)
+```
+```{r}
+boxplot(Boston$crim)
+boxplot(Boston$tax)
+boxplot(Boston$ptratio)
+```
+e) How many of the suburbs in this data set bound the Charles river?
+
+The chas column is binary 1 is if the suburb tracts the river Charles River. 35 suburbs track the Charles River
+```{r}
+summary(as.factor(Boston$chas))
+```
+f) What is the median pupil-teacher ratio among the towns in this dataset?
+
+ptratio is the colmn of interest. 19.05 is the median ratio
+```{r}
+median(Boston$ptratio)
+```
+
+g)Which suburb of Boston has lowest median value of owner- occupied homes? What are the values of the other predictors for that suburb, and how do those values compare to the overall ranges for those predictors? Comment on your findings.
+```{r}
+t(subset(Boston, medv == min(Boston$medv)))
+```
+Crime is worse in 406. Lower status of the population is higher in 399 but I am not sure what that means exactly. I would probably stick to 399 because of the lower crime rate per capita.
+
+
+h)In this data set, how many of the suburbs average more than seven rooms per dwelling? More than eight rooms per dwelling? Comment on the suburbs that average more than eight rooms per dwelling.
+
+```{r}
+nrow(subset(Boston, rm > 7))
+nrow(subset(Boston, rm > 8))
+
+subset(Boston, rm > 8)
+```
+These houses have a high median value and property-tax rate and low crime rates
+
+
+
+
+
+
+
